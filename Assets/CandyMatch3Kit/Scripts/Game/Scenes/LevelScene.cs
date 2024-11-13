@@ -29,7 +29,6 @@ namespace GameVanilla.Game.Scenes
         private GameObject avatarPrefab;
 
         [SerializeField]
-        private GameObject rewardedAdButton;
 #pragma warning restore 649
 
         /// <summary>
@@ -40,7 +39,6 @@ namespace GameVanilla.Game.Scenes
             Assert.IsNotNull(scrollRect);
             Assert.IsNotNull(scrollView);
             Assert.IsNotNull(avatarPrefab);
-            Assert.IsNotNull(rewardedAdButton);
         }
 
         /// <summary>
@@ -118,13 +116,6 @@ namespace GameVanilla.Game.Scenes
             }
         }
 
-        public void OnSpinWheelButtonPressed()
-        {
-            OpenPopup<SpinWheelPopup>("Popups/SpinWheelPopup", popup =>
-            {
-                var gameConfig = PuzzleMatchManager.instance.gameConfig;
-                popup.SetInfo(gameConfig.spinWheelItems, gameConfig.spinWheelCost);
-            });
-        }
+        
     }
 }

@@ -20,8 +20,6 @@ namespace GameVanilla.Game.Scenes
     public class HomeScene : BaseScene
     {
 #pragma warning disable 649
-        [SerializeField]
-        private AnimatedButton soundButton;
 
         [SerializeField]
         private AnimatedButton musicButton;
@@ -35,7 +33,6 @@ namespace GameVanilla.Game.Scenes
         /// </summary>
         private void Awake()
         {
-            Assert.IsNotNull(soundButton);
             Assert.IsNotNull(musicButton);
         }
 
@@ -116,10 +113,7 @@ namespace GameVanilla.Game.Scenes
         /// <summary>
         /// Called when the sound button is pressed.
         /// </summary>
-        public void OnSoundButtonPressed()
-        {
-            SoundManager.instance.ToggleSound();
-        }
+        
 
         /// <summary>
         /// Called when the music button is pressed.
@@ -134,8 +128,6 @@ namespace GameVanilla.Game.Scenes
         /// </summary>
         public void UpdateButtons()
         {
-            var sound = PlayerPrefs.GetInt("sound_enabled");
-            soundButton.transform.GetChild(0).GetComponent<SpriteSwapper>().SetEnabled(sound == 1);
             var music = PlayerPrefs.GetInt("music_enabled");
             musicButton.transform.GetChild(0).GetComponent<SpriteSwapper>().SetEnabled(music == 1);
         }
