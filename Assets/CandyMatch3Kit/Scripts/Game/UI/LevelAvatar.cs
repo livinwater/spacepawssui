@@ -14,14 +14,9 @@ namespace GameVanilla.Game.UI
     public class LevelAvatar : MonoBehaviour
     {
 #pragma warning disable 649
-        [SerializeField]
-        private Sprite girlAvatarSprite;
 
         [SerializeField]
-        private Sprite boyAvatarSprite;
-
-        [SerializeField]
-        private Image avatarImage;
+        private Sprite avatarImage;
 #pragma warning restore 649
 
         private bool floating;
@@ -32,8 +27,6 @@ namespace GameVanilla.Game.UI
         /// </summary>
         private void Awake()
         {
-            Assert.IsNotNull(girlAvatarSprite);
-            Assert.IsNotNull(boyAvatarSprite);
             Assert.IsNotNull(avatarImage);
         }
 
@@ -43,7 +36,6 @@ namespace GameVanilla.Game.UI
         private void Start()
         {
             var avatarSelected = PlayerPrefs.GetInt("avatar_selected");
-            avatarImage.sprite = avatarSelected == 0 ? girlAvatarSprite : boyAvatarSprite;
         }
 
         /// <summary>
