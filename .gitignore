@@ -1,0 +1,24 @@
+# Temp files
+Temp/
+Library/
+Logs/
+UserSettings/
+obj/
+
+# Build files
+Builds/
+Build/
+
+# Large binary files
+*.psd
+*.tga
+*.tif
+*.cubemap
+*.unitypackage
+
+# Optional: Large audio files
+# *.mp3
+# *.wav
+
+# Cache files
+*.DS_Store
