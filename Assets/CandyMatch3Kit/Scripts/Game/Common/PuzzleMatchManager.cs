@@ -24,6 +24,8 @@ namespace GameVanilla.Game.Common
         public CoinsSystem coinsSystem;
 
         public int lastSelectedLevel;
+        
+        public int stakingAmount;
         public bool unlockedNextLevel;
 
         #if UNITY_IAP
