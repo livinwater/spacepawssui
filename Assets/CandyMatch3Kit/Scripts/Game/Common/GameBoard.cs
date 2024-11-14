@@ -5,6 +5,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;  // Add this line for LINQ methods
 
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -1596,36 +1597,28 @@ namespace GameVanilla.Game.Common
                     Debug.Log($"Match found with {match.tiles.Count} tiles");
                     foreach (var tile in match.tiles)
                     {
-                        var tileScore = gameConfig.GetTileScore(tile.GetComponent<Tile>());
-                        Debug.Log($"Tile score: {tileScore}");
-                        UpdateScore(tileScore);  // Update score here
-                        ExplodeTile(tile, false);  // Make sure ExplodeTile doesn't update score
-                    }
-                }
-
-                Debug.Log($"Total score after matches: {gameState.score}");
-                
-                // Check goals based on score
-                var goalsComplete = true;
-                foreach (var goal in level.goals)
-                {
-                    var reachScoreGoal = goal as ReachScoreGoal;
-                    if (reachScoreGoal != null)
-                    {
-                        if (gameState.score < reachScoreGoal.score)
+                        // Update collected candies count in game state
+                        var candy = tile.GetComponent<Candy>();
+                        if (candy != null)
                         {
-                            Debug.Log($"Goal not complete. Current score: {gameState.score}, Required: {reachScoreGoal.score}");
-                            goalsComplete = false;
-                            break;
+                            Debug.Log($"Processing candy of type: {candy.color}");
+                            if (!gameState.collectedCandies.ContainsKey(candy.color))
+                            {
+                                gameState.collectedCandies[candy.color] = 0;
+                            }
+                            gameState.collectedCandies[candy.color]++;
+                            Debug.Log($"Updated collected {candy.color} candies: {gameState.collectedCandies[candy.color]}");
                         }
+
+                        var tileScore = gameConfig.GetTileScore(tile.GetComponent<Tile>());
+                        UpdateScore(tileScore);
+                        ExplodeTile(tile, false);
                     }
                 }
 
-                if (goalsComplete)
-                {
-                    Debug.Log("All goals complete!");
-                    gameScene.CheckEndGame();
-                }
+                // Update UI to reflect collected candies
+                gameUi.UpdateGoals(gameState);
+                Debug.Log($"Current collected candies: {string.Join(", ", gameState.collectedCandies.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}");
 
                 ApplyGravity();
                 return true;

@@ -30,14 +30,7 @@ namespace GameVanilla.Game.Common
         [SerializeField] private ProgressBar progressBar;
 
         [SerializeField] private GameObject goalPrefab;
-
-        [SerializeField] private GameObject scoreGoalItem;
-
-        [SerializeField] private Text scoreGoalItemText;
-
-        [SerializeField] private GameObject scoreGoalOnlyItem;
-
-        [SerializeField] private Text scoreGoalOnlyItemText;
+        
 #pragma warning restore 649
 
         /// <summary>
@@ -51,10 +44,7 @@ namespace GameVanilla.Game.Common
             Assert.IsNotNull(progressBar);
             Assert.IsNotNull(goalPrefab);
             Assert.IsNotNull(goalGroup);
-            Assert.IsNotNull(scoreGoalItem);
-            Assert.IsNotNull(scoreGoalItemText);
-            Assert.IsNotNull(scoreGoalOnlyItem);
-            Assert.IsNotNull(scoreGoalOnlyItemText);
+            
         }
 
         /// <summary>
@@ -110,26 +100,6 @@ namespace GameVanilla.Game.Common
                 Destroy(child.gameObject);
             }
 
-            var reachScoreGoal = goals.Find(x => x is ReachScoreGoal);
-            if (reachScoreGoal != null)
-            {
-                if (goals.Count == 1)
-                {
-                    scoreGoalItem.SetActive(false);
-                    scoreGoalOnlyItemText.text = ((ReachScoreGoal) reachScoreGoal).score.ToString();
-                }
-                else
-                {
-                    scoreGoalOnlyItem.SetActive(false);
-                    scoreGoalItemText.text = ((ReachScoreGoal) reachScoreGoal).score.ToString();
-                }
-            }
-            else
-            {
-                scoreGoalItem.SetActive(false);
-                scoreGoalOnlyItem.SetActive(false);
-            }
-
             foreach (var goal in goals)
             {
                 if (!(goal is ReachScoreGoal))
@@ -137,18 +107,6 @@ namespace GameVanilla.Game.Common
                     var goalObject = Instantiate(goalPrefab);
                     goalObject.transform.SetParent(goalGroup.transform, false);
                     goalObject.GetComponent<GoalUiElement>().Fill(goal);
-                }
-            }
-
-            if (scaleImages)
-            {
-                var goalsWithoutScore = goals.FindAll(x => !(x is ReachScoreGoal));
-                if (goalsWithoutScore.Count >= 3)
-                {
-                    foreach (var child in goalGroup.GetComponentsInChildren<GoalUiElement>().ToList())
-                    {
-                        child.GetComponent<RectTransform>().localScale = new Vector3(0.8f, 0.8f, 1.0f);
-                    }
                 }
             }
         }

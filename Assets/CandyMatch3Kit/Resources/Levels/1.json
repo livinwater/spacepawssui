@@ -35,11 +35,12 @@
         }
     ],
     "limitType": "Moves",
-    "limit": 10,
+    "limit": 3,
     "goals": [
         {
-            "score": 30,
-            "$type": "GameVanilla.Game.Common.ReachScoreGoal"
+            "candyType": "Blue",
+            "amount": 3,
+            "$type": "GameVanilla.Game.Common.CollectCandyGoal"
         }
     ],
     "availableColors": [
