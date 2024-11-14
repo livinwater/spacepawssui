@@ -59,7 +59,6 @@ namespace GameVanilla.Game.Common
         public ObjectPool watermelonPool;
 
         public ObjectPool lightBgTilePool;
-        public ObjectPool darkBgTilePool;
 
         private readonly List<ObjectPool> candies = new List<ObjectPool>();
         private readonly List<ObjectPool> horizontalStripedCandies = new List<ObjectPool>();
@@ -118,7 +117,6 @@ namespace GameVanilla.Game.Common
             Assert.IsNotNull(watermelonPool);
 
             Assert.IsNotNull(lightBgTilePool);
-            Assert.IsNotNull(darkBgTilePool);
 
             candies.Add(blueCandyPool);
             candies.Add(greenCandyPool);

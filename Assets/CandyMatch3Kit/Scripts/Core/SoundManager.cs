@@ -72,6 +72,12 @@ namespace GameVanilla.Core
                 nameToSound.Remove(sound.name);
             }
         }
+        
+        public bool IsMusicEnabled()
+        {
+            var music = PlayerPrefs.GetInt("music_enabled", 1);
+            return music == 1;
+        }
 
         /// <summary>
         /// Plays the specified audio clip.

@@ -7,6 +7,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 using GameVanilla.Core;
 using GameVanilla.Game.Common;
@@ -391,6 +392,11 @@ namespace GameVanilla.Game.Scenes
 
             });
             tween.setOnComplete(() => ingameBoosterPanel.GetComponent<CanvasGroup>().blocksRaycasts = false);
+        }
+
+        public void OnBackButtonPressed()
+        {
+            SceneManager.LoadScene("LevelScene");
         }
 	}
 }

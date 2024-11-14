@@ -5465,7 +5465,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f00f1aa12dab34a52af9eceed7f7445f, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5849,7 +5848,6 @@ RectTransform:
   - {fileID: 224469696172194030}
   - {fileID: 224087339065210560}
   - {fileID: 224466478691027550}
-  - {fileID: 224179414452372902}
   - {fileID: 224880150049343804}
   - {fileID: 224012271388289472}
   - {fileID: 224253184499611356}
@@ -5963,12 +5961,14 @@ MonoBehaviour:
           m_StringArgument: Rain
           m_BoolArgument: 0
         m_CallState: 2
-  levelText: {fileID: 114968259617776476}
+  titleText: {fileID: 0}
   scoreText: {fileID: 114172646837272698}
   goalGroup: {fileID: 1702760493839580}
-  scoreOnlyReachedText: {fileID: 114720824408666308}
-  girl: {fileID: 0}
-  boy: {fileID: 0}
+  goalPrefab: {fileID: 0}
+  homeButton: {fileID: 0}
+  retryButton: {fileID: 0}
+  levelText: {fileID: 0}
+  scoreOnlyReachedText: {fileID: 0}
 --- !u!114 &114603074932168652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6026,11 +6026,11 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 224968632706431344}
+  m_Father: {fileID: 224012271388289472}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3, y: -202.29999}
+  m_AnchoredPosition: {x: 3, y: 199.70001}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222921396731143710
@@ -6334,6 +6334,7 @@ RectTransform:
   m_Children:
   - {fileID: 224742997968618954}
   - {fileID: 224434242681983394}
+  - {fileID: 224179414452372902}
   m_Father: {fileID: 224968632706431344}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -11404,7 +11405,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 8870f6c8e0bf54093952872ae097e63e, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

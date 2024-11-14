@@ -320,20 +320,7 @@ namespace GameVanilla.Game.Common
                     var levelTile = level.tiles[i + (j * level.width)];
                     if (!(levelTile is HoleTile))
                     {
-                        GameObject bgTile;
-                        if (j % 2 == 0)
-                        {
-                            bgTile = i % 2 == 0
-                                ? tilePool.darkBgTilePool.GetObject()
-                                : tilePool.lightBgTilePool.GetObject();
-                        }
-                        else
-                        {
-                            bgTile = i % 2 == 0
-                                ? tilePool.lightBgTilePool.GetObject()
-                                : tilePool.darkBgTilePool.GetObject();
-                        }
-
+                        var bgTile = tilePool.lightBgTilePool.GetObject();
                         bgTile.transform.position = newPos;
                     }
                 }
@@ -2407,6 +2394,20 @@ namespace GameVanilla.Game.Common
                     break;
             }
             return explosion;
+        }
+
+        private void CreateBackgroundTiles()
+        {
+            for (var j = 0; j < level.height; j++)
+            {
+                for (var i = 0; i < level.width; i++)
+                {
+                    // Always use lightBgTilePool instead of checking for dark/light
+                    var bgTile = tilePool.lightBgTilePool.GetObject();
+                    bgTile.transform.position = tilePositions[i + (j * level.width)];
+                    bgTile.transform.localScale = Vector3.one;
+                }
+            }
         }
     }
 }

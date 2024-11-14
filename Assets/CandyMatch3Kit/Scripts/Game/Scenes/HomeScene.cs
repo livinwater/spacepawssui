@@ -8,9 +8,11 @@ using System.Globalization;
 
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 
 using GameVanilla.Core;
 using GameVanilla.Game.Popups;
+using GameVanilla.Game.UI;
 
 namespace GameVanilla.Game.Scenes
 {
@@ -23,9 +25,7 @@ namespace GameVanilla.Game.Scenes
 
         [SerializeField]
         private AnimatedButton musicButton;
-
-        [SerializeField]
-        private AnimatedButton soundButton;
+        
 #pragma warning restore 649
 
         private readonly string dateLastPlayedKey = "date_last_played";
@@ -36,8 +36,10 @@ namespace GameVanilla.Game.Scenes
         /// </summary>
         private void Awake()
         {
-            Assert.IsNotNull(musicButton);
-            Assert.IsNotNull(soundButton);
+            if (musicButton != null)
+            {
+                Assert.IsNotNull(musicButton);
+            }
         }
 
         /// <summary>
@@ -124,7 +126,12 @@ namespace GameVanilla.Game.Scenes
         /// </summary>
         public void OnMusicButtonPressed()
         {
-            SoundManager.instance.ToggleMusic();
+            if (musicButton != null)
+            {
+                var audioManager = SoundManager.instance;
+                audioManager.ToggleMusic();
+                musicButton.transform.GetChild(0).GetComponent<SpriteSwapper>().SetEnabled(!audioManager.IsMusicEnabled());
+            }
         }
 
         /// <summary>
