@@ -4,6 +4,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 using GameVanilla.Core;
 
@@ -15,9 +16,10 @@ namespace GameVanilla.Game.UI
     public class ProgressBar : MonoBehaviour
     {
         public Image progressBarImage;
-        public ProgressStar star1Image;
-        public ProgressStar star2Image;
-        public ProgressStar star3Image;
+        
+        public Sprite idleSprite;     // Sprite for idle expression
+        public Sprite happySprite;    // Sprite for happy expression
+        public Sprite delightedSprite; // Sprite for delighted expression
 
         [HideInInspector]
         public int star1;
@@ -26,12 +28,9 @@ namespace GameVanilla.Game.UI
         [HideInInspector]
         public int star3;
 
-        public GameObject girlAvatar;
-        public GameObject boyAvatar;
-        public Animator girlAnimator;
-        public Animator boyAnimator;
-        private Animator avatarAnimator;
-
+        public GameObject characterAvatar;
+        private Image avatarImage;
+        
         private bool star1Achieved;
         private bool star2Achieved;
         private bool star3Achieved;
@@ -41,16 +40,39 @@ namespace GameVanilla.Game.UI
         /// </summary>
         private void Start()
         {
-            var avatarSelected = PlayerPrefs.GetInt("avatar_selected");
-            if (avatarSelected == 0)
+            Debug.Log($"ProgressBar Start - characterAvatar: {characterAvatar}");
+    
+            if (characterAvatar != null)
             {
-                avatarAnimator = girlAnimator;
-                boyAvatar.SetActive(false);
+                // Get the Image component from the Character GameObject, not from the Mask
+                avatarImage = characterAvatar.GetComponent<Image>();
+                if (avatarImage == null)
+                {
+                    // If not found directly, try to find it in children but exclude Mask
+                    avatarImage = characterAvatar.GetComponentsInChildren<Image>()
+                        .FirstOrDefault(img => img.gameObject.name != "Mask");
+                }
+        
+                Debug.Log($"Got avatarImage component: {avatarImage?.gameObject.name}");
+        
+                if (avatarImage == null)
+                {
+                    Debug.LogError("Could not find Image component in characterAvatar or its children!");
+                }
+                else
+                {
+                    avatarImage.sprite = idleSprite;
+                    Debug.Log($"Set initial sprite: {idleSprite.name}");
+                }
             }
             else
             {
-                avatarAnimator = boyAnimator;
-                girlAvatar.SetActive(false);
+                Debug.LogError("characterAvatar reference is null!");
+            }
+
+            if (progressBarImage != null)
+            {
+                progressBarImage.fillAmount = 0f;
             }
         }
 
@@ -62,17 +84,40 @@ namespace GameVanilla.Game.UI
         /// <param name="score3">The score to reach the third star.</param>
         public void Fill(int score1, int score2, int score3)
         {
-            progressBarImage.fillAmount = 0;
+            Debug.Log($"Fill called with scores: {score1}, {score2}, {score3}");
+            
+            if (progressBarImage != null)
+            {
+                progressBarImage.fillAmount = 0;
+            }
 
             star1 = score1;
             star2 = score2;
             star3 = score3;
 
-            UpdateProgressBar(0);
+            Debug.Log($"Stars set to: {star1}, {star2}, {star3}");
 
+            // Reset achievement flags
             star1Achieved = false;
             star2Achieved = false;
             star3Achieved = false;
+
+            // Set initial avatar sprite
+            if (avatarImage != null && idleSprite != null)
+            {
+                Debug.Log("Setting initial idle sprite");
+                avatarImage.sprite = idleSprite;
+                if (SoundManager.instance != null)
+                {
+                    SoundManager.instance.PlaySound("StarProgressBar");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Avatar Image or Idle Sprite is null. avatarImage: {avatarImage}, idleSprite: {idleSprite}");
+            }
+
+            UpdateProgressBar(0);
         }
 
         /// <summary>
@@ -81,40 +126,64 @@ namespace GameVanilla.Game.UI
         /// <param name="score">The current score.</param>
         public void UpdateProgressBar(int score)
         {
-            progressBarImage.fillAmount = GetProgressValue(score) / 100.0f;
-
-            if (score >= star1 && !star1Achieved)
+            Debug.Log($"UpdateProgressBar called with score: {score}");
+            
+            if (progressBarImage != null)
             {
-                star1Achieved = true;
-                star1Image.Activate();
-                avatarAnimator.SetTrigger("Happy");
-                SoundManager.instance.PlaySound("StarProgressBar");
-            }
-            if (score >= star2 && !star2Achieved)
-            {
-                star2Achieved = true;
-                star2Image.Activate();
-                avatarAnimator.SetTrigger("Happy");
-                SoundManager.instance.PlaySound("StarProgressBar");
-            }
-            if (score >= star3 && !star3Achieved)
-            {
-                star3Achieved = true;
-                star3Image.Activate();
-                avatarAnimator.SetTrigger("Happy");
-                SoundManager.instance.PlaySound("StarProgressBar");
+                float fillAmount = GetProgressValue(score) / 100.0f;
+                Debug.Log($"Setting fill amount to: {fillAmount}");
+                progressBarImage.fillAmount = fillAmount;
             }
 
-            star1Image.transform.localPosition = progressBarImage.transform.localPosition +
-                                                 new Vector3(
-                                                     progressBarImage.rectTransform.rect.width *
-                                                     (GetProgressValue(star1) / 100.0f) - 0.0f, 0, 0);
-            star2Image.transform.localPosition = progressBarImage.transform.localPosition +
-                                                 new Vector3(
-                                                     progressBarImage.rectTransform.rect.width *
-                                                     (GetProgressValue(star2) / 100.0f) - 0.0f, 0, 0);
-            star3Image.transform.localPosition = progressBarImage.transform.localPosition +
-                                                 new Vector3(progressBarImage.rectTransform.rect.width - 0.0f, 0, 0);
+            if (avatarImage != null)
+            {
+                Debug.Log($"Current score: {score}, Star thresholds: {star1}/{star2}/{star3}");
+                Debug.Log($"Current avatar state - star1Achieved: {star1Achieved}, star2Achieved: {star2Achieved}, star3Achieved: {star3Achieved}");
+                
+                if (score >= star1 && !star1Achieved && idleSprite != null)
+                {
+                    Debug.Log("Setting idle sprite");
+                    star1Achieved = true;
+                    avatarImage.sprite = idleSprite;
+                    if (SoundManager.instance != null)
+                    {
+                        SoundManager.instance.PlaySound("StarProgressBar");
+                    }
+                }
+                if (score >= star2 && !star2Achieved && happySprite != null)
+                {
+                    Debug.Log("Setting happy sprite");
+                    star2Achieved = true;
+                    avatarImage.sprite = happySprite;
+                    if (SoundManager.instance != null)
+                    {
+                        SoundManager.instance.PlaySound("StarProgressBar");
+                    }
+                }
+                if (score >= star3 && !star3Achieved && delightedSprite != null)
+                {
+                    Debug.Log("Setting delighted sprite");
+                    star3Achieved = true;
+                    avatarImage.sprite = delightedSprite;
+                    if (SoundManager.instance != null)
+                    {
+                        SoundManager.instance.PlaySound("StarProgressBar");
+                    }
+                }
+                
+                if (avatarImage.sprite != null)
+                {
+                    Debug.Log($"Current sprite: {avatarImage.sprite.name}");
+                }
+                else
+                {
+                    Debug.LogError("Current sprite is null!");
+                }
+            }
+            else
+            {
+                Debug.LogError("Avatar Image is null!");
+            }
         }
 
         /// <summary>

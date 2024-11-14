@@ -161,7 +161,15 @@ namespace GameVanilla.Game.Common
         /// <param name="score3">The score needed to reach the third star.</param>
         public void InitializeProgressBar(int score1, int score2, int score3)
         {
-            progressBar.Fill(score1, score2, score3);
+            Debug.Log($"Initializing ProgressBar with scores: {score1}/{score2}/{score3}");
+            if (progressBar != null)
+            {
+                progressBar.Fill(score1, score2, score3);
+            }
+            else
+            {
+                Debug.LogError("ProgressBar reference is null in GameUi!");
+            }
         }
 
         /// <summary>
@@ -170,7 +178,15 @@ namespace GameVanilla.Game.Common
         /// <param name="score">The score.</param>
         public void SetProgressBar(int score)
         {
-            progressBar.UpdateProgressBar(score);
+            Debug.Log($"Setting ProgressBar score to: {score}");
+            if (progressBar != null)
+            {
+                progressBar.UpdateProgressBar(score);
+            }
+            else
+            {
+                Debug.LogError("ProgressBar reference is null in GameUi!");
+            }
         }
 
         /// <summary>

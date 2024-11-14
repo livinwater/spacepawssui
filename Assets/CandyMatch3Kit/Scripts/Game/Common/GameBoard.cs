@@ -111,14 +111,6 @@ namespace GameVanilla.Game.Common
             public GameObject tileB;
         }
 
-        private enum SwapDirection
-        {
-            Horizontal,
-            Vertical
-        }
-
-        private SwapDirection swapDirection;
-
         private bool currentlySwapping;
 
         private readonly MatchDetector horizontalMatchDetector = new HorizontalMatchDetector();
@@ -126,7 +118,13 @@ namespace GameVanilla.Game.Common
         private readonly MatchDetector tShapedMatchDetector = new TshapedMatchDetector();
         private readonly MatchDetector lShapedMatchDetector = new LshapedMatchDetector();
 
-        private int consecutiveCascades;
+         private enum SwapDirection
+         {
+             Horizontal,
+             Vertical
+        }
+
+        private SwapDirection swapDirection;
 
         /// <summary>
         /// Unity's Awake method.
@@ -183,7 +181,9 @@ namespace GameVanilla.Game.Common
         /// <param name="score">The score.</param>
         private void UpdateScore(int score)
         {
+            var oldScore = gameState.score;
             gameState.score += score;
+            Debug.Log($"Score updated: {oldScore} + {score} = {gameState.score}");
             gameUi.SetScore(gameState.score);
             gameUi.SetProgressBar(gameState.score);
         }
@@ -235,8 +235,6 @@ namespace GameVanilla.Game.Common
 
             currentLimit = level.limit;
             currentlyAwarding = false;
-
-            consecutiveCascades = 0;
 
             explodedChocolate = false;
 
@@ -294,16 +292,21 @@ namespace GameVanilla.Game.Common
                 }
             }
 
-            var totalWidth = (level.width - 1) * (tileW + horizontalSpacing);
-            var totalHeight = (level.height - 1) * (tileH + verticalSpacing);
+            const int maxGridSize = 10;
+            var totalWidth = (maxGridSize - 1) * (tileW + horizontalSpacing);
+            var totalHeight = (maxGridSize - 1) * (tileH + verticalSpacing);
+
+            var offsetX = (maxGridSize - level.width) * (tileW + horizontalSpacing) / 2;
+            var offsetY = (maxGridSize - level.height) * (tileH + verticalSpacing) / 2;
+
             for (var j = 0; j < level.height; j++)
             {
                 for (var i = 0; i < level.width; i++)
                 {
                     var tilePos = new Vector2(i * (tileW + horizontalSpacing), -j * (tileH + verticalSpacing));
                     var newPos = tilePos;
-                    newPos.x -= totalWidth / 2;
-                    newPos.y += totalHeight / 2;
+                    newPos.x -= (totalWidth / 2) - offsetX;
+                    newPos.y += (totalHeight / 2) - offsetY;
                     newPos.y += boardCenter.position.y;
                     var tile = tiles[i + (j * level.width)];
                     if (tile != null)
@@ -391,7 +394,7 @@ namespace GameVanilla.Game.Common
             }
 
             var zoomLevel = gameConfig.GetZoomLevel();
-            Camera.main.orthographicSize = (totalWidth * zoomLevel) * (Screen.height / (float)Screen.width) * 0.5f;
+            Camera.main.orthographicSize = (totalWidth * zoomLevel) * (Screen.height / (float)Screen.width) * 0.3f;
 
             possibleSwaps = DetectPossibleSwaps();
         }
@@ -1190,28 +1193,24 @@ namespace GameVanilla.Game.Common
         /// <param name="didAnySpecialCandyExplode">True if any special candy exploded; false otherwise.</param>
         public void ExplodeTile(GameObject tile, bool didAnySpecialCandyExplode = false)
         {
-            var explodedTiles = new List<GameObject>();
-            ExplodeTileRecursive(tile, explodedTiles);
-            var score = 0;
-            foreach (var explodedTile in explodedTiles)
-            {
-                var idx = tiles.FindIndex(x => x == explodedTile);
-                if (idx != -1)
-                {
-                    explodedTile.GetComponent<Tile>().ShowExplosionFx(fxPool);
-                    explodedTile.GetComponent<Tile>().UpdateGameState(gameState);
-                    score += gameConfig.GetTileScore(explodedTile.GetComponent<Tile>());
-                    DestroyElements(explodedTile);
-                    DestroySpecialBlocks(explodedTile, didAnySpecialCandyExplode);
-                    explodedTile.GetComponent<PooledObject>().pool.ReturnObject(explodedTile);
-                    tiles[idx] = null;
-                }
+            var x = tile.GetComponent<Tile>().x;
+            var y = tile.GetComponent<Tile>().y;
+            var idx = x + (y * level.width);
 
-                SoundManager.instance.PlaySound("CandyMatch");
+            // Create explosion effect
+            var candy = tile.GetComponent<Candy>();
+            if (candy != null)
+            {
+                var explosion = GetExplosionForCandy(candy);
+                if (explosion != null)
+                {
+                    explosion.transform.position = tile.transform.position;
+                }
             }
 
-            UpdateScore(score);
-            gameUi.UpdateGoals(gameState);
+            // Return tile to pool
+            tile.GetComponent<PooledObject>().pool.ReturnObject(tile);
+            tiles[idx] = null;
         }
         
         /// <summary>
@@ -1587,268 +1586,51 @@ namespace GameVanilla.Game.Common
         /// <returns>True if there were any matches; false otherwise.</returns>
         private bool HandleMatches(bool isPlayerMatch)
         {
-            var matches = new List<Match>();
-            var tShapedMatches = tShapedMatchDetector.DetectMatches(this);
-            var lShapedMatches = lShapedMatchDetector.DetectMatches(this);
-            var horizontalMatches = horizontalMatchDetector.DetectMatches(this);
-            var verticalMatches = verticalMatchDetector.DetectMatches(this);
-
-            if (tShapedMatches.Count > 0)
-            {
-                matches.AddRange(tShapedMatches);
-                foreach (var match in horizontalMatches)
-                {
-                    var found = false;
-                    foreach (var match2 in tShapedMatches)
-                    {
-                        if (match.tiles.Find(x => match2.tiles.Contains(x)) != null)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        matches.Add(match);
-                    }
-                }
-
-                foreach (var match in verticalMatches)
-                {
-                    var found = false;
-                    foreach (var match2 in tShapedMatches)
-                    {
-                        if (match.tiles.Find(x => match2.tiles.Contains(x)) != null)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        matches.Add(match);
-                    }
-                }
-            }
-            else if (lShapedMatches.Count > 0)
-            {
-                matches.AddRange(lShapedMatches);
-                foreach (var match in horizontalMatches)
-                {
-                    var found = false;
-                    foreach (var match2 in lShapedMatches)
-                    {
-                        if (match.tiles.Find(x => match2.tiles.Contains(x)) != null)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        matches.Add(match);
-                    }
-                }
-
-                foreach (var match in verticalMatches)
-                {
-                    var found = false;
-                    foreach (var match2 in lShapedMatches)
-                    {
-                        if (match.tiles.Find(x => match2.tiles.Contains(x)) != null)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        matches.Add(match);
-                    }
-                }
-            }
-            else if (horizontalMatches.Count > 0)
-            {
-                matches.AddRange(horizontalMatches);
-                foreach (var match in verticalMatches)
-                {
-                    var found = false;
-                    foreach (var match2 in horizontalMatches)
-                    {
-                        if (match.tiles.Find(x => match2.tiles.Contains(x)) != null)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        matches.Add(match);
-                    }
-                }
-            }
-            else
-            {
-                matches.AddRange(horizontalMatches);
-                matches.AddRange(verticalMatches);
-            }
+            var matches = DetectMatches();
+            Debug.Log($"DetectMatches found {matches.Count} matches");
 
             if (matches.Count > 0)
             {
-                var didAnySpecialCandyExplode = false;
-                var numSpecialCandiesGenerated = 0;
-
                 foreach (var match in matches)
                 {
-                    var randomTile = match.tiles[UnityEngine.Random.Range(0, match.tiles.Count)];
-                    var randomIdx = tiles.FindIndex(x => x == randomTile);
-                    var randomColor = randomTile.GetComponent<Candy>().color;
-
-                    if (match.tiles.Find(x =>
-                        x.GetComponent<StripedCandy>() != null || x.GetComponent<WrappedCandy>() != null))
-                    {
-                        didAnySpecialCandyExplode = true;
-                    }
-
+                    Debug.Log($"Match found with {match.tiles.Count} tiles");
                     foreach (var tile in match.tiles)
                     {
-                        ExplodeTile(tile, didAnySpecialCandyExplode);
-                    }
-
-                    if (!didAnySpecialCandyExplode && numSpecialCandiesGenerated == 0)
-                    {
-                        if (match.tiles.Count >= 5 && match.type != MatchType.TShaped &&
-                            match.type != MatchType.LShaped)
-                        {
-                            if (isPlayerMatch)
-                            {
-                                if (match.tiles.Contains(lastSelectedTile))
-                                {
-                                    CreateColorBomb(lastSelectedTileX, lastSelectedTileY);
-                                }
-                                else if (match.tiles.Contains(lastOtherSelectedTile))
-                                {
-                                    CreateColorBomb(lastOtherSelectedTileX, lastOtherSelectedTileY);
-                                }
-                            }
-                            else if (randomIdx != -1)
-                            {
-                                var i = randomIdx % level.width;
-                                var j = randomIdx / level.width;
-                                CreateColorBomb(i, j);
-                            }
-
-                            ++numSpecialCandiesGenerated;
-                        }
-                        else if (match.tiles.Count >= 5)
-                        {
-                            if (isPlayerMatch) 
-                            {
-                                if (match.tiles.Contains(lastSelectedTile))
-                                {
-                                    CreateWrappedTile(lastSelectedTileX, lastSelectedTileY,
-                                        lastSelectedCandyColor);
-                                }
-                                else if (match.tiles.Contains(lastOtherSelectedTile))
-                                {
-                                    CreateWrappedTile(lastOtherSelectedTileX, lastOtherSelectedTileY,
-                                        lastOtherSelectedCandyColor);
-                                }
-                            }
-                            else if (randomIdx != -1)
-                            {
-                                var i = randomIdx % level.width;
-                                var j = randomIdx / level.width;
-                                CreateWrappedTile(i, j, randomColor);
-                            }
-                            
-                            ++numSpecialCandiesGenerated;
-                        }
-                        else if (match.tiles.Count >= 4)
-                        {
-                            if (swapDirection == SwapDirection.Horizontal)
-                            {
-                                if (isPlayerMatch)
-                                {
-                                    if (match.tiles.Contains(lastSelectedTile))
-                                    {
-                                        CreateHorizontalStripedTile(lastSelectedTileX, lastSelectedTileY,
-                                            lastSelectedCandyColor);
-                                    }
-                                    else if (match.tiles.Contains(lastOtherSelectedTile))
-                                    {
-                                        CreateHorizontalStripedTile(lastOtherSelectedTileX, lastOtherSelectedTileY,
-                                            lastOtherSelectedCandyColor);
-                                    }
-                                }
-                                else if (randomIdx != -1)
-                                {
-                                    var i = randomIdx % level.width;
-                                    var j = randomIdx / level.width;
-                                    CreateHorizontalStripedTile(i, j, randomColor);
-                                }
-                            }
-                            else
-                            {
-                                if (isPlayerMatch)
-                                {
-                                    if (match.tiles.Contains(lastSelectedTile))
-                                    {
-                                        CreateVerticalStripedTile(lastSelectedTileX, lastSelectedTileY,
-                                            lastSelectedCandyColor);
-                                    }
-                                    else if (match.tiles.Contains(lastOtherSelectedTile))
-                                    {
-                                        CreateVerticalStripedTile(lastOtherSelectedTileX, lastOtherSelectedTileY,
-                                            lastOtherSelectedCandyColor);
-                                    }
-                                }
-                                else if (randomIdx != -1)
-                                {
-                                    var i = randomIdx % level.width;
-                                    var j = randomIdx / level.width;
-                                    CreateVerticalStripedTile(i, j, randomColor);
-                                }
-                            }
-                            
-                            ++numSpecialCandiesGenerated;
-                        }
+                        var tileScore = gameConfig.GetTileScore(tile.GetComponent<Tile>());
+                        Debug.Log($"Tile score: {tileScore}");
+                        UpdateScore(tileScore);  // Update score here
+                        ExplodeTile(tile, false);  // Make sure ExplodeTile doesn't update score
                     }
                 }
 
-                if (isPlayerMatch)
+                Debug.Log($"Total score after matches: {gameState.score}");
+                
+                // Check goals based on score
+                var goalsComplete = true;
+                foreach (var goal in level.goals)
                 {
-                    consecutiveCascades = 0;
-                }
-                else
-                {
-                    consecutiveCascades += 1;
-                    if (consecutiveCascades == 2)
+                    var reachScoreGoal = goal as ReachScoreGoal;
+                    if (reachScoreGoal != null)
                     {
-                        gameScene.ShowComplimentText(ComplimentType.Good);
-                    }
-                    else if (consecutiveCascades == 4)
-                    {
-                        gameScene.ShowComplimentText(ComplimentType.Super);
-                    }
-                    else if (consecutiveCascades == 6)
-                    {
-                        gameScene.ShowComplimentText(ComplimentType.Yummy);
+                        if (gameState.score < reachScoreGoal.score)
+                        {
+                            Debug.Log($"Goal not complete. Current score: {gameState.score}, Required: {reachScoreGoal.score}");
+                            goalsComplete = false;
+                            break;
+                        }
                     }
                 }
 
-                StartCoroutine(ApplyGravityAsync(didAnySpecialCandyExplode ? 0.5f : 0.0f));
+                if (goalsComplete)
+                {
+                    Debug.Log("All goals complete!");
+                    gameScene.CheckEndGame();
+                }
+
+                ApplyGravity();
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
@@ -2542,6 +2324,96 @@ namespace GameVanilla.Game.Common
             numBoosters -= 1;
             PlayerPrefs.SetInt(playerPrefsKey, numBoosters);
             button.UpdateAmount(numBoosters);
+        }
+
+        private List<Match> DetectMatches()
+        {
+            var matches = new List<Match>();
+            
+            // Add horizontal matches
+            for (var j = 0; j < level.height; j++)
+            {
+                for (var i = 0; i < level.width - 2; i++)
+                {
+                    var tile1 = GetTile(i, j);
+                    var tile2 = GetTile(i + 1, j);
+                    var tile3 = GetTile(i + 2, j);
+                    
+                    if (tile1 != null && tile2 != null && tile3 != null)
+                    {
+                        var candy1 = tile1.GetComponent<Candy>();
+                        var candy2 = tile2.GetComponent<Candy>();
+                        var candy3 = tile3.GetComponent<Candy>();
+                        
+                        if (candy1 != null && candy2 != null && candy3 != null &&
+                            candy1.color == candy2.color && candy2.color == candy3.color)
+                        {
+                            var match = new Match();
+                            match.tiles.Add(tile1);
+                            match.tiles.Add(tile2);
+                            match.tiles.Add(tile3);
+                            matches.Add(match);
+                        }
+                    }
+                }
+            }
+            
+            // Add vertical matches
+            for (var i = 0; i < level.width; i++)
+            {
+                for (var j = 0; j < level.height - 2; j++)
+                {
+                    var tile1 = GetTile(i, j);
+                    var tile2 = GetTile(i, j + 1);
+                    var tile3 = GetTile(i, j + 2);
+                    
+                    if (tile1 != null && tile2 != null && tile3 != null)
+                    {
+                        var candy1 = tile1.GetComponent<Candy>();
+                        var candy2 = tile2.GetComponent<Candy>();
+                        var candy3 = tile3.GetComponent<Candy>();
+                        
+                        if (candy1 != null && candy2 != null && candy3 != null &&
+                            candy1.color == candy2.color && candy2.color == candy3.color)
+                        {
+                            var match = new Match();
+                            match.tiles.Add(tile1);
+                            match.tiles.Add(tile2);
+                            match.tiles.Add(tile3);
+                            matches.Add(match);
+                        }
+                    }
+                }
+            }
+            
+            return matches;
+        }
+
+        private GameObject GetExplosionForCandy(Candy candy)
+        {
+            GameObject explosion = null;
+            switch (candy.color)
+            {
+                case CandyColor.Blue:
+                    explosion = fxPool.blueCandyExplosion.GetObject();
+                    break;
+                case CandyColor.Green:
+                    explosion = fxPool.greenCandyExplosion.GetObject();
+                    break;
+                case CandyColor.Orange:
+                    explosion = fxPool.orangeCandyExplosion.GetObject();
+                    break;
+                case CandyColor.Purple:
+                    explosion = fxPool.purpleCandyExplosion.GetObject();
+                    break;
+                case CandyColor.Red:
+                    explosion = fxPool.redCandyExplosion.GetObject();
+                    break;
+                case CandyColor.Yellow:
+                    explosion = fxPool.yellowCandyExplosion.GetObject();
+                    break;
+            }
+            return explosion;
         }
     }
 }

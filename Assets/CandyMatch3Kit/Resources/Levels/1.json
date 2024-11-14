@@ -24,11 +24,15 @@
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
         {
+            "type": "RedCandy",
+            "elementType": "None",
+            "$type": "GameVanilla.Game.Common.CandyTile"
+        },
+        {
             "type": "BlueCandy",
             "elementType": "None",
             "$type": "GameVanilla.Game.Common.CandyTile"
         }
-        
     ],
     "limitType": "Moves",
     "limit": 10,

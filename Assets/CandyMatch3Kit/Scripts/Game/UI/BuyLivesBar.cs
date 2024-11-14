@@ -48,6 +48,8 @@ namespace GameVanilla.Game.UI
         private Sprite disabledButtonSprite;
 #pragma warning restore 649
 
+        private Coroutine countdownCoroutine;
+
         /// <summary>
         /// Unity's Awake method.
         /// </summary>
@@ -81,7 +83,14 @@ namespace GameVanilla.Game.UI
         /// </summary>
         private void OnDestroy()
         {
-            PuzzleMatchManager.instance.livesSystem.Unsubscribe(OnLivesCountdownUpdated, OnLivesCountdownFinished);
+            if (PuzzleMatchManager.instance != null && PuzzleMatchManager.instance.livesSystem != null)
+            {
+                PuzzleMatchManager.instance.livesSystem.Unsubscribe(OnLivesCountdownUpdated, OnLivesCountdownFinished);
+            }
+            if (countdownCoroutine != null)
+            {
+                StopCoroutine(countdownCoroutine);
+            }
         }
 
         /// <summary>

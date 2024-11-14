@@ -10,7 +10,7 @@ namespace GameVanilla.Game.UI
     /// <summary>
     /// This class manages a star of the in-game progress bar.
     /// </summary>
-    public class ProgressStar : MonoBehaviour
+    public class ProgressStar: MonoBehaviour
     {
         public Image image;
         public Sprite onSprite;

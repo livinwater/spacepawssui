@@ -123,9 +123,23 @@ namespace GameVanilla.Game.Popups
         {
             numLevel = levelNum;
 
+            // Add validation
             var serializer = new fsSerializer();
-            var level = FileUtils.LoadJsonFile<Level>(serializer, "Levels/" + numLevel);
-            levelText.text = "Level " + numLevel;
+            try 
+            {
+                var level = FileUtils.LoadJsonFile<Level>(serializer, "Levels/" + numLevel);
+                if (level == null)
+                {
+                    Debug.LogError($"Failed to load level {numLevel} - level data is null");
+                    return;
+                }
+                levelText.text = "Level " + numLevel;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to load level {numLevel}: {e.Message}");
+                return;
+            }
         }
         
         /// <summary>
@@ -136,6 +150,13 @@ namespace GameVanilla.Game.Popups
         {
             if (hasStaked)
             {
+                // Add validation
+                if (numLevel <= 0)
+                {
+                    Debug.LogError("Invalid level number: " + numLevel);
+                    return;
+                }
+
                 // Pass stakingAmount to your game logic
                 PuzzleMatchManager.instance.lastSelectedLevel = numLevel;
                 PuzzleMatchManager.instance.stakingAmount = stakingAmount;
@@ -143,7 +164,6 @@ namespace GameVanilla.Game.Popups
             }
             else
             {
-                // This should not happen since the Play button is disabled when not staked
                 statusMessageText.text = "You must stake before playing.";
             }
         }

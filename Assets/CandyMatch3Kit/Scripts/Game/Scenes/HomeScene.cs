@@ -23,6 +23,9 @@ namespace GameVanilla.Game.Scenes
 
         [SerializeField]
         private AnimatedButton musicButton;
+
+        [SerializeField]
+        private AnimatedButton soundButton;
 #pragma warning restore 649
 
         private readonly string dateLastPlayedKey = "date_last_played";
@@ -34,6 +37,7 @@ namespace GameVanilla.Game.Scenes
         private void Awake()
         {
             Assert.IsNotNull(musicButton);
+            Assert.IsNotNull(soundButton);
         }
 
         /// <summary>
