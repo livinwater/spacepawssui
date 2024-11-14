@@ -45,7 +45,7 @@ namespace GameVanilla.Game.UI
             if (goal is CollectCandyGoal)
             {
                 var candyGoal = (CollectCandyGoal)goal;
-                var texture = Resources.Load("Game/" + candyGoal.candyType + "Candy") as Texture2D;
+                var texture = Resources.Load("Game/" + candyGoal.candyType + "Algae") as Texture2D;
                 if (texture != null)
                 {
                     image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
