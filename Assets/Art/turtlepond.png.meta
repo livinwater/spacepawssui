@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      turtlepond_0: 9032137008665632888
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

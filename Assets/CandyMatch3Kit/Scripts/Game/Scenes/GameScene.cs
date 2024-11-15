@@ -193,15 +193,7 @@ namespace GameVanilla.Game.Scenes
                 {
                     PuzzleMatchManager.instance.unlockedNextLevel = false;
                 }
-
-                if (level.limitType == LimitType.Moves && level.awardSpecialCandies && gameBoard.currentLimit > 0)
-                {
-                    gameBoard.AwardSpecialCandies();
-                }
-                else
-                {
                     StartCoroutine(OpenWinPopupAsync());
-                }
             }
             else
             {
@@ -348,7 +340,7 @@ namespace GameVanilla.Game.Scenes
 			switch (button.boosterType)
 			{
 				case BoosterType.Lollipop:
-					ingameBoosterText.text = "Select a tile for the lollipop:";
+					ingameBoosterText.text = "Select a tile for the cyclinder:";
 					break;
 
 				case BoosterType.Bomb:

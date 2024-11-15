@@ -94,8 +94,8 @@ namespace GameVanilla.Game.Popups
 			{
 				case BoosterType.Lollipop:
 					boosterImage.sprite = lollipopSprite;
-					boosterNameText.text = "Lollipop";
-					boosterDescriptionText.text = "Destroy one candy of your choice on the board.";
+					boosterNameText.text = "Cyclinder";
+					boosterDescriptionText.text = "Destroy one algae of your choice on the board.";
 					break;
 
 				case BoosterType.Bomb:
@@ -107,13 +107,13 @@ namespace GameVanilla.Game.Popups
 				case BoosterType.Switch:
 					boosterImage.sprite = switchSprite;
 					boosterNameText.text = "Switch";
-					boosterDescriptionText.text = "Switch two candies.";
+					boosterDescriptionText.text = "Switch two algaes.";
 					break;
 
 				case BoosterType.ColorBomb:
 					boosterImage.sprite = colorBombSprite;
 					boosterNameText.text = "Color bomb";
-					boosterDescriptionText.text = "Destroy all the candies of the same random color.";
+					boosterDescriptionText.text = "Destroy all the algaes of the same random color.";
 					break;
 			}
 
