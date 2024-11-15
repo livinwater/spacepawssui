@@ -1,12 +1,14 @@
+// Copyright (C) 2017 gamevanilla. All rights reserved.
+// This code can only be used under the standard Unity Asset Store End User License Agreement,
+// a copy of which is available at http://unity3d.com/company/legal/as_terms.
+
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using GameVanilla.Core;
-using GameVanilla.Game.Common;
-using GameVanilla.Game.UI;
-using FullSerializer;
-using GameVanilla.Game.Scenes;
 
+using GameVanilla.Core;
+using GameVanilla.Game.Scenes;
+using GameVanilla.Game.UI;
 
 namespace GameVanilla.Game.Popups
 {
@@ -15,28 +17,56 @@ namespace GameVanilla.Game.Popups
     /// </summary>
     public class EndGamePopup : Popup
     {
-        [SerializeField] private Text titleText;
-        [SerializeField] private Text scoreText;
-        [SerializeField] private GameObject goalGroup;
-        [SerializeField] private GameObject goalPrefab;
-        [SerializeField] private Button homeButton;
-        [SerializeField] private Button retryButton;
-        [SerializeField] private Text levelText; // Added
-        [SerializeField] private Text scoreOnlyReachedText; // Added
+#pragma warning disable 649
+        [SerializeField]
+        private Text levelText;
 
+        [SerializeField]
+        private Text scoreText;
+
+        [SerializeField]
+        private GameObject goalGroup;
+
+        [SerializeField]
+        private Text scoreOnlyReachedText;
+        
+        [SerializeField]
+        private GameObject girl;
+        
+        [SerializeField]
+        private GameObject boy;
+#pragma warning restore 649
+
+        /// <summary>
+        /// Unity's Awake method.
+        /// </summary>
         protected override void Awake()
         {
             base.Awake();
-            Assert.IsNotNull(titleText, "titleText is null in EndGamePopup");
-            Assert.IsNotNull(scoreText, "scoreText is null in EndGamePopup");
-            Assert.IsNotNull(goalGroup, "goalGroup is null in EndGamePopup");
-            Assert.IsNotNull(goalPrefab, "goalPrefab is null in EndGamePopup");
-            Assert.IsNotNull(homeButton, "homeButton is null in EndGamePopup");
-            Assert.IsNotNull(retryButton, "retryButton is null in EndGamePopup");
-            Assert.IsNotNull(levelText, "levelText is null in EndGamePopup"); // Added
-            Assert.IsNotNull(scoreOnlyReachedText, "scoreOnlyReachedText is null in EndGamePopup"); // Added
+            Assert.IsNotNull(levelText);
+            Assert.IsNotNull(scoreText);
+            Assert.IsNotNull(goalGroup);
+            Assert.IsNotNull(scoreOnlyReachedText);
+            Assert.IsNotNull(girl);
+            Assert.IsNotNull(boy);
+        }
+        
+        /// <summary>
+        /// Unity's Start method.
+        /// </summary>
+        protected override void Start()
+        {
+            base.Start();
+            var avatarSelected = PlayerPrefs.GetInt("avatar_selected");
+            if (avatarSelected == 0)
+                boy.SetActive(false);
+            else
+                girl.SetActive(false);
         }
 
+        /// <summary>
+        /// Called when the replay button is pressed.
+        /// </summary>
         public void OnReplayButtonPressed()
         {
             var gameScene = parentScene as GameScene;
@@ -55,16 +85,28 @@ namespace GameVanilla.Game.Popups
             }
         }
 
-        public void SetScore(int score)
-        {
-            scoreText.text = score.ToString();
-        }
-
+        /// <summary>
+        /// Sets the level text.
+        /// </summary>
+        /// <param name="level">The level text.</param>
         public void SetLevel(int level)
         {
             levelText.text = "Level " + level;
         }
 
+        /// <summary>
+        /// Sets the score text.
+        /// </summary>
+        /// <param name="score">The score text.</param>
+        public void SetScore(int score)
+        {
+            scoreText.text = score.ToString();
+        }
+
+        /// <summary>
+        /// Sets the goals group.
+        /// </summary>
+        /// <param name="group">The goals group.</param>
         public void SetGoals(GameObject group)
         {
             var goals = group.GetComponentsInChildren<GoalUiElement>();
@@ -73,7 +115,7 @@ namespace GameVanilla.Game.Popups
                 scoreOnlyReachedText.gameObject.SetActive(false);
                 foreach (var goal in goals)
                 {
-                    var goalObject = Instantiate(goal.gameObject);
+                    var goalObject = Instantiate(goal);
                     goalObject.transform.SetParent(goalGroup.transform, false);
                     goalObject.GetComponent<GoalUiElement>().SetCompletedTick(goal.isCompleted);
                 }
@@ -83,5 +125,5 @@ namespace GameVanilla.Game.Popups
                 scoreOnlyReachedText.gameObject.SetActive(true);
             }
         }
-    } // Correctly closes the class
-} // Correctly closes the namespace
+    }
+}

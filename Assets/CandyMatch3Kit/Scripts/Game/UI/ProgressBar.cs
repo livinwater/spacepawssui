@@ -103,19 +103,20 @@ namespace GameVanilla.Game.UI
             star3Achieved = false;
 
             // Set initial avatar sprite
-            if (avatarImage != null && idleSprite != null)
-            {
-                Debug.Log("Setting initial idle sprite");
-                avatarImage.sprite = idleSprite;
-                if (SoundManager.instance != null)
-                {
-                    SoundManager.instance.PlaySound("StarProgressBar");
-                }
-            }
-            else
-            {
-                Debug.LogError($"Avatar Image or Idle Sprite is null. avatarImage: {avatarImage}, idleSprite: {idleSprite}");
-            }
+            // IRVIN:
+            // if (avatarImage != null && idleSprite != null)
+            // {
+            //     Debug.Log("Setting initial idle sprite");
+            //     avatarImage.sprite = idleSprite;
+            //     if (SoundManager.instance != null)
+            //     {
+            //         SoundManager.instance.PlaySound("StarProgressBar");
+            //     }
+            // }
+            // else
+            // {
+            //     Debug.LogError($"Avatar Image or Idle Sprite is null. avatarImage: {avatarImage}, idleSprite: {idleSprite}");
+            // }
 
             UpdateProgressBar(0);
         }
@@ -135,55 +136,56 @@ namespace GameVanilla.Game.UI
                 progressBarImage.fillAmount = fillAmount;
             }
 
-            if (avatarImage != null)
-            {
-                Debug.Log($"Current score: {score}, Star thresholds: {star1}/{star2}/{star3}");
-                Debug.Log($"Current avatar state - star1Achieved: {star1Achieved}, star2Achieved: {star2Achieved}, star3Achieved: {star3Achieved}");
-                
-                if (score >= star1 && !star1Achieved && idleSprite != null)
-                {
-                    Debug.Log("Setting idle sprite");
-                    star1Achieved = true;
-                    avatarImage.sprite = idleSprite;
-                    if (SoundManager.instance != null)
-                    {
-                        SoundManager.instance.PlaySound("StarProgressBar");
-                    }
-                }
-                if (score >= star2 && !star2Achieved && happySprite != null)
-                {
-                    Debug.Log("Setting happy sprite");
-                    star2Achieved = true;
-                    avatarImage.sprite = happySprite;
-                    if (SoundManager.instance != null)
-                    {
-                        SoundManager.instance.PlaySound("StarProgressBar");
-                    }
-                }
-                if (score >= star3 && !star3Achieved && delightedSprite != null)
-                {
-                    Debug.Log("Setting delighted sprite");
-                    star3Achieved = true;
-                    avatarImage.sprite = delightedSprite;
-                    if (SoundManager.instance != null)
-                    {
-                        SoundManager.instance.PlaySound("StarProgressBar");
-                    }
-                }
-                
-                if (avatarImage.sprite != null)
-                {
-                    Debug.Log($"Current sprite: {avatarImage.sprite.name}");
-                }
-                else
-                {
-                    Debug.LogError("Current sprite is null!");
-                }
-            }
-            else
-            {
-                Debug.LogError("Avatar Image is null!");
-            }
+            // IRVIN:
+            // if (avatarImage != null)
+            // {
+            //     Debug.Log($"Current score: {score}, Star thresholds: {star1}/{star2}/{star3}");
+            //     Debug.Log($"Current avatar state - star1Achieved: {star1Achieved}, star2Achieved: {star2Achieved}, star3Achieved: {star3Achieved}");
+            //     
+            //     if (score >= star1 && !star1Achieved && idleSprite != null)
+            //     {
+            //         Debug.Log("Setting idle sprite");
+            //         star1Achieved = true;
+            //         avatarImage.sprite = idleSprite;
+            //         if (SoundManager.instance != null)
+            //         {
+            //             SoundManager.instance.PlaySound("StarProgressBar");
+            //         }
+            //     }
+            //     if (score >= star2 && !star2Achieved && happySprite != null)
+            //     {
+            //         Debug.Log("Setting happy sprite");
+            //         star2Achieved = true;
+            //         avatarImage.sprite = happySprite;
+            //         if (SoundManager.instance != null)
+            //         {
+            //             SoundManager.instance.PlaySound("StarProgressBar");
+            //         }
+            //     }
+            //     if (score >= star3 && !star3Achieved && delightedSprite != null)
+            //     {
+            //         Debug.Log("Setting delighted sprite");
+            //         star3Achieved = true;
+            //         avatarImage.sprite = delightedSprite;
+            //         if (SoundManager.instance != null)
+            //         {
+            //             SoundManager.instance.PlaySound("StarProgressBar");
+            //         }
+            //     }
+            //     
+            //     if (avatarImage.sprite != null)
+            //     {
+            //         Debug.Log($"Current sprite: {avatarImage.sprite.name}");
+            //     }
+            //     else
+            //     {
+            //         Debug.LogError("Current sprite is null!");
+            //     }
+            // }
+            // else
+            // {
+            //     Debug.LogError("Avatar Image is null!");
+            // }
         }
 
         /// <summary>
