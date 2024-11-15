@@ -47,8 +47,8 @@ namespace GameVanilla.Game.Popups
             Assert.IsNotNull(scoreText);
             Assert.IsNotNull(goalGroup);
             Assert.IsNotNull(scoreOnlyReachedText);
-            Assert.IsNotNull(girl);
-            Assert.IsNotNull(boy);
+            //Assert.IsNotNull(girl);
+            //Assert.IsNotNull(boy);
         }
         
         /// <summary>

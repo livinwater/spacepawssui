@@ -5,6 +5,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using TMPro;
 
 namespace GameVanilla.Game.Popups
 {
@@ -18,9 +19,8 @@ namespace GameVanilla.Game.Popups
         [SerializeField] private Image star1;
         [SerializeField] private Image star2;
         [SerializeField] private Image star3;
-        [SerializeField] private Button nextButton;
-        [SerializeField] private GameObject coinsGroup;
-        [SerializeField] private Text coinsText;
+        // [SerializeField] private GameObject coinsGroup;
+        // [SerializeField] private Text coinsText;
         [SerializeField] private Sprite disabledStarSprite;
 #pragma warning restore 649
 
@@ -33,10 +33,10 @@ namespace GameVanilla.Game.Popups
             Assert.IsNotNull(star1);
             Assert.IsNotNull(star2);
             Assert.IsNotNull(star3);
-            Assert.IsNotNull(nextButton, "nextButton is null in WinPopup");
-            Assert.IsNotNull(coinsGroup, "coinsGroup is null in WinPopup");
-            Assert.IsNotNull(coinsText, "coinsText is null in WinPopup");
+            // Assert.IsNotNull(coinsGroup, "coinsGroup is null in WinPopup");
+            // Assert.IsNotNull(coinsText, "coinsText is null in WinPopup");
             Assert.IsNotNull(disabledStarSprite);
+
         }
 
         public void SetStars(int stars)
@@ -57,5 +57,6 @@ namespace GameVanilla.Game.Popups
                 star3.sprite = disabledStarSprite;
             }
         }
+        
     }
 }
