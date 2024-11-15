@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RedAlgae_0: -7813742301421767961
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

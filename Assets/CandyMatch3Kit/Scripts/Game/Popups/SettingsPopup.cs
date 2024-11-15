@@ -19,12 +19,6 @@ namespace GameVanilla.Game.Popups
     {
 #pragma warning disable 649
         [SerializeField]
-        private ToggleGroup avatarToggleGroup;
-
-        [SerializeField]
-        private Slider soundSlider;
-
-        [SerializeField]
         private Slider musicSlider;
 
         [SerializeField]
@@ -37,10 +31,7 @@ namespace GameVanilla.Game.Popups
         private Sprite resetProgressDisabledSprite;
 #pragma warning restore 649
 
-        private int currentAvatar;
-        private int currentSound;
         private int currentMusic;
-        private int currentNotifications;
 
         /// <summary>
         /// Unity's Awake method.
@@ -48,8 +39,6 @@ namespace GameVanilla.Game.Popups
         protected override void Awake()
         {
             base.Awake();
-            Assert.IsNotNull(avatarToggleGroup);
-            Assert.IsNotNull(soundSlider);
             Assert.IsNotNull(musicSlider);
             Assert.IsNotNull(resetProgressButton);
             Assert.IsNotNull(resetProgressImage);
@@ -62,14 +51,6 @@ namespace GameVanilla.Game.Popups
         protected override void Start()
         {
             base.Start();
-            var avatarSelected = PlayerPrefs.GetInt("avatar_selected");
-            var toggles = avatarToggleGroup.GetComponentsInChildren<Toggle>();
-            for (var i = 0; i < toggles.Length; i++)
-            {
-                toggles[i].isOn = i == avatarSelected;
-            }
-
-            soundSlider.value = PlayerPrefs.GetInt("sound_enabled");
             musicSlider.value = PlayerPrefs.GetInt("music_enabled");
         }
 
@@ -86,8 +67,7 @@ namespace GameVanilla.Game.Popups
         /// </summary>
         public void OnSaveButtonPressed()
         {
-            PlayerPrefs.SetInt("avatar_selected", currentAvatar);
-            SoundManager.instance.SetSoundEnabled(currentSound == 1);
+            PlayerPrefs.SetInt("music_enabled", currentMusic);
             SoundManager.instance.SetMusicEnabled(currentMusic == 1);
             var homeScene = parentScene as HomeScene;
             if (homeScene != null)
@@ -137,35 +117,11 @@ namespace GameVanilla.Game.Popups
         }
 
         /// <summary>
-        /// Called when the girl avatar is selected.
-        /// </summary>
-        public void OnGirlAvatarSelected()
-        {
-            currentAvatar = 0;
-        }
-
-        /// <summary>
-        /// Called when the boy avatar is selected.
-        /// </summary>
-        public void OnBoyAvatarSelected()
-        {
-            currentAvatar = 1;
-        }
-
-        /// <summary>
-        /// Called when the sound slider value is changed.
-        /// </summary>
-        public void OnSoundSliderValueChanged()
-        {
-            currentSound = (int) soundSlider.value;
-        }
-
-        /// <summary>
         /// Called when the music slider value is changed.
         /// </summary>
         public void OnMusicSliderValueChanged()
         {
-            currentMusic = (int) musicSlider.value;
+            currentMusic = (int)musicSlider.value;
         }
     }
 }

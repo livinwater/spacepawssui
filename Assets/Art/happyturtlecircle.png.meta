@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      happyturtlecircle_0: 1583925286151112047
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

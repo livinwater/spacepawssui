@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      YellowAlgae_0: 431548400480233913
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

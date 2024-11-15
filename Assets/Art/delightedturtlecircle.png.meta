@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      delightedturtlecircle_0: 2954436515260936589
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

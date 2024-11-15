@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BlueAlgae_0: 7209455987589730082
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
