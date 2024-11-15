@@ -9,6 +9,7 @@ using System.Globalization;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 using GameVanilla.Core;
 using GameVanilla.Game.Popups;
@@ -149,6 +150,14 @@ namespace GameVanilla.Game.Scenes
         {
             var music = PlayerPrefs.GetInt("music_enabled");
             musicButton.transform.GetChild(0).GetComponent<SpriteSwapper>().SetEnabled(music == 1);
+        }
+
+        public void OnPlayButtonPressed()
+        {
+            // actually controlled via the scene transition
+            
+            // Load cutscene first
+            SceneManager.LoadScene("LevelScene");
         }
     }
 }

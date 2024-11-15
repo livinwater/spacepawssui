@@ -14,3 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/CandyMatch3Kit/Scenes/GameScene.unity
     guid: f61bdcf053b6d4590b74a2953da5f91e
+  - enabled: 1
+    path: Assets/CandyMatch3Kit/Scenes/CutsceneScene.unity
+    guid: 7d412b894538d4795803dea5a1445de7
+  m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

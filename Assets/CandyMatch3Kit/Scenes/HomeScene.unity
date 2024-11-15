@@ -1782,7 +1782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d670dfeab51eae44385ce0cbd02537a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scene: LevelScene
+  scene: CutsceneScene
   duration: 1
   color: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &2030071647
