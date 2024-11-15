@@ -52,16 +52,25 @@ namespace GameVanilla.Core
         /// </summary>
         public void ClosePopup()
         {
+            if (currentPopups.Count == 0)
+            {
+                Debug.LogWarning("ClosePopup called but currentPopups stack is empty.");
+                return;
+            }
+
             var topmostPopup = currentPopups.Pop();
             if (topmostPopup == null)
             {
                 return;
             }
 
-            var topmostPanel = currentPanels.Pop();
-            if (topmostPanel != null)
+            if (currentPanels.Count > 0)
             {
-                StartCoroutine(FadeOut(topmostPanel.GetComponent<Image>(), 0.2f, () => Destroy(topmostPanel)));
+                var topmostPanel = currentPanels.Pop();
+                if (topmostPanel != null)
+                {
+                    StartCoroutine(FadeOut(topmostPanel.GetComponent<Image>(), 0.2f, () => Destroy(topmostPanel)));
+                }
             }
         }
 
