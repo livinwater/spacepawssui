@@ -26,6 +26,9 @@ namespace GameVanilla.Game.Scenes
         [SerializeField]
         private AnimatedButton musicButton;
         
+        [SerializeField] private AudioClip levelSelectMusic; // Add this field
+
+        
 #pragma warning restore 649
 
         private readonly string dateLastPlayedKey = "date_last_played";
@@ -47,8 +50,13 @@ namespace GameVanilla.Game.Scenes
         /// </summary>
         private void Start()
         {
+            // Play level select music
+            if (levelSelectMusic != null)
+            {
+                SoundManager.instance.SetMusicEnabled(levelSelectMusic);
+            }
             UpdateButtons();
-            CheckDailyBonus();
+            //CheckDailyBonus();
         }
 
         /// <summary>

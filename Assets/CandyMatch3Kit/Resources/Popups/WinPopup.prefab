@@ -6278,9 +6278,9 @@ MonoBehaviour:
   m_onClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114714273734127910}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: PerformTransition
+      - m_Target: {fileID: 114813471332421420}
+        m_TargetAssemblyTypeName: GameVanilla.Game.Popups.WinPopup, Assembly-CSharp
+        m_MethodName: OnNextButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6348,7 +6348,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1, y: 171.00003}
+  m_AnchoredPosition: {x: 1, y: 39}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1428920743039208
@@ -12159,7 +12159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &224081972917087046
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22826,9 +22826,6 @@ MonoBehaviour:
   star1: {fileID: 114373459776916210}
   star2: {fileID: 114613234444427618}
   star3: {fileID: 114969374707139594}
-  nextButton: {fileID: 0}
-  coinsGroup: {fileID: 0}
-  coinsText: {fileID: 0}
   disabledStarSprite: {fileID: 21300000, guid: 3bea475eb68ff42128c995986d8105da, type: 3}
 --- !u!114 &114714273734127910
 MonoBehaviour:

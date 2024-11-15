@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 namespace GameVanilla.Game.Popups
 {
@@ -56,6 +58,20 @@ namespace GameVanilla.Game.Popups
             {
                 star3.sprite = disabledStarSprite;
             }
+        }
+        
+        public void OnNextButtonPressed()
+        {
+            // Close the popup
+            Close();
+
+            // Load the next level
+            var currentLevel = PlayerPrefs.GetInt("current_level", 1);
+            var nextLevel = currentLevel + 1;
+            PlayerPrefs.SetInt("current_level", nextLevel);
+
+            // Reload the GameScene
+            SceneManager.LoadScene("GameScene");
         }
         
     }

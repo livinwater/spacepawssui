@@ -5896,6 +5896,7 @@ MonoBehaviour:
   scrollView: {fileID: 1589531055}
   avatarPrefab: {fileID: 1396622610223104, guid: 8a0a67104687543f8bd5fc76d96fa4b3,
     type: 3}
+  levelSelectMusic: {fileID: 0}
 --- !u!4 &705393198
 Transform:
   m_ObjectHideFlags: 0
@@ -13693,7 +13694,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8490566, g: 0.62591434, b: 0.17221431, a: 1}
+  m_Color: {r: 0.17572844, g: 0.7169812, b: 0.13866144, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -1,8 +1,5 @@
-// Copyright (C) 2017 gamevanilla. All rights reserved.
-// This code can only be used under the standard Unity Asset Store End User License Agreement,
-// a copy of which is available at http://unity3d.com/company/legal/as_terms.
-
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GameVanilla.Core
 {
@@ -12,8 +9,13 @@ namespace GameVanilla.Core
     public class BackgroundMusic : MonoBehaviour
     {
         private static BackgroundMusic instance;
-
         private AudioSource audioSource;
+
+        // Singleton instance accessor
+        public static BackgroundMusic Instance
+        {
+            get { return instance; }
+        }
 
         /// <summary>
         /// Unity's Awake method.
@@ -29,6 +31,9 @@ namespace GameVanilla.Core
             DontDestroyOnLoad(gameObject);
 
             audioSource = GetComponent<AudioSource>();
+
+            // Subscribe to scene loaded event
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         /// <summary>
@@ -36,9 +41,64 @@ namespace GameVanilla.Core
         /// </summary>
         private void Start()
         {
-            var music = PlayerPrefs.GetInt("music_enabled");
+            var music = PlayerPrefs.GetInt("music_enabled", 1);
             audioSource.mute = music == 0;
             audioSource.Play();
+        }
+
+        /// <summary>
+        /// Method to change the music clip.
+        /// </summary>
+        /// <param name="newClip">The new music clip to play.</param>
+        public void ChangeMusic(AudioClip newClip)
+        {
+            if (newClip == null)
+            {
+                Debug.LogWarning("Attempted to change music to a null clip.");
+                return;
+            }
+
+            if (audioSource.clip == newClip)
+                return; // Already playing this clip
+
+            audioSource.Stop();
+            audioSource.clip = newClip;
+
+            var music = PlayerPrefs.GetInt("music_enabled", 1);
+            audioSource.mute = music == 0;
+            audioSource.Play();
+        }
+
+        /// <summary>
+        /// Called when a scene is loaded.
+        /// </summary>
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "GameScene")
+            {
+                // Load and play the game scene music
+                AudioClip gameSceneMusic = Resources.Load<AudioClip>("Music/GameScene");
+                ChangeMusic(gameSceneMusic);
+            }
+            else if (scene.name == "MainMenuScene")
+            {
+                // Load and play the main menu music
+                AudioClip mainMenuMusic = Resources.Load<AudioClip>("Music/MainMenu");
+                ChangeMusic(mainMenuMusic);
+            }
+            // Add more conditions for other scenes if needed
+        }
+
+        /// <summary>
+        /// Unity's OnDestroy method.
+        /// </summary>
+        private void OnDestroy()
+        {
+            // Unsubscribe from the scene loaded event
+            if (instance == this)
+            {
+                SceneManager.sceneLoaded -= OnSceneLoaded;
+            }
         }
     }
 }
