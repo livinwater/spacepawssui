@@ -65,13 +65,25 @@ namespace GameVanilla.Game.Popups
             {
                 // Close the popup
                 Close();
-                Debug.Log($"Current level: {PlayerPrefs.GetInt("current_level", 1)}");
-                // Update both current_level and lastSelectedLevel
-                var currentLevel = PlayerPrefs.GetInt("current_level", 1);
+                
+                // Get the current level from PuzzleMatchManager
+                var currentLevel = PuzzleMatchManager.instance.lastSelectedLevel;
+                Debug.Log($"Current level from PuzzleMatchManager: {currentLevel}");
+                
+                // Increment to next level
                 var nextLevel = currentLevel + 1;
+                
+                // Update both tracking systems
                 PlayerPrefs.SetInt("current_level", nextLevel);
-                //PuzzleMatchManager.instance.lastSelectedLevel = nextLevel;
+                PlayerPrefs.SetInt("next_level", nextLevel);  // This is used for level unlocking
+                PuzzleMatchManager.instance.lastSelectedLevel = nextLevel;
+                
+                Debug.Log($"Moving to level {nextLevel}");
 
+                // Reset any completed level data
+                PlayerPrefs.DeleteKey($"level_stars_{currentLevel}");
+                PlayerPrefs.DeleteKey($"level_score_{currentLevel}");
+                
                 // Reload the GameScene
                 SceneManager.LoadScene("GameScene");
             }

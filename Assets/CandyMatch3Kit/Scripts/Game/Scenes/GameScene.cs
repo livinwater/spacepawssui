@@ -64,12 +64,16 @@ namespace GameVanilla.Game.Scenes
 		    Debug.Log("GameScene Start - Initializing...");
 		    gameBoard.InitializeObjectPools();
 		    
-		    // Make sure we're using the correct level number
+		    // Always use lastSelectedLevel from PuzzleMatchManager
 		    if (PuzzleMatchManager.instance.lastSelectedLevel == 0)
 		    {
-		        PuzzleMatchManager.instance.lastSelectedLevel = PlayerPrefs.GetInt("current_level", 1);
+		        // If not set, start at level 1
+		        PuzzleMatchManager.instance.lastSelectedLevel = 1;
+		        PlayerPrefs.SetInt("current_level", 1);
+		        PlayerPrefs.SetInt("next_level", 1);
 		    }
 		    
+		    Debug.Log($"Loading level {PuzzleMatchManager.instance.lastSelectedLevel}");
 		    gameBoard.LoadLevel();
 		    level = gameBoard.level;
 		    OpenPopup<LevelGoalsPopup>("Popups/LevelGoalsPopup", popup => popup.SetGoals(level.goals));
