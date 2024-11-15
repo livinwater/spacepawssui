@@ -13,7 +13,7 @@
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
         {
-            "type": "RandomCandy",
+            "type": "RedCandy",
             "elementType": "None",
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
@@ -67,7 +67,7 @@
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
         {
-            "type": "RandomCandy",
+            "type": "RedCandy",
             "elementType": "None",
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
@@ -87,7 +87,7 @@
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
         {
-            "type": "RandomCandy",
+            "type": "RedCandy",
             "elementType": "None",
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
