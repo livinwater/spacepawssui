@@ -5,9 +5,8 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using TMPro;
 using UnityEngine.SceneManagement;
-
+using GameVanilla.Game.Common;
 
 namespace GameVanilla.Game.Popups
 {
@@ -62,17 +61,26 @@ namespace GameVanilla.Game.Popups
         
         public void OnNextButtonPressed()
         {
-            // Close the popup
-            Close();
+            try
+            {
+                // Close the popup
+                Close();
+                Debug.Log($"Current level: {PlayerPrefs.GetInt("current_level", 1)}");
+                // Update both current_level and lastSelectedLevel
+                var currentLevel = PlayerPrefs.GetInt("current_level", 1);
+                var nextLevel = currentLevel + 1;
+                PlayerPrefs.SetInt("current_level", nextLevel);
+                //PuzzleMatchManager.instance.lastSelectedLevel = nextLevel;
 
-            // Load the next level
-            var currentLevel = PlayerPrefs.GetInt("current_level", 1);
-            var nextLevel = currentLevel + 1;
-            PlayerPrefs.SetInt("current_level", nextLevel);
-
-            // Reload the GameScene
-            SceneManager.LoadScene("GameScene");
+                // Reload the GameScene
+                SceneManager.LoadScene("GameScene");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Error in OnNextButtonPressed: {e.Message}");
+            }
         }
         
     }
 }
+

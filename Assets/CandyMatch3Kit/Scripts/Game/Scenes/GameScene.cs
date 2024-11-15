@@ -61,11 +61,18 @@ namespace GameVanilla.Game.Scenes
 	    /// </summary>
 		private void Start()
 	    {
+		    Debug.Log("GameScene Start - Initializing...");
 		    gameBoard.InitializeObjectPools();
-			gameBoard.LoadLevel();
-
-			level = gameBoard.level;
-            OpenPopup<LevelGoalsPopup>("Popups/LevelGoalsPopup", popup => popup.SetGoals(level.goals));
+		    
+		    // Make sure we're using the correct level number
+		    if (PuzzleMatchManager.instance.lastSelectedLevel == 0)
+		    {
+		        PuzzleMatchManager.instance.lastSelectedLevel = PlayerPrefs.GetInt("current_level", 1);
+		    }
+		    
+		    gameBoard.LoadLevel();
+		    level = gameBoard.level;
+		    OpenPopup<LevelGoalsPopup>("Popups/LevelGoalsPopup", popup => popup.SetGoals(level.goals));
 		}
 
 	    /// <summary>
