@@ -128,7 +128,7 @@
         }
     ],
     "limitType": "Moves",
-    "limit": 15,
+    "limit": 10,
     "goals": [
         {
             "candyType": "Green",

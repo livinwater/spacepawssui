@@ -18,8 +18,8 @@ namespace GameVanilla.Game.Popups
         [SerializeField]
         private AnimatedButton soundButton;
 
-        [SerializeField]
-        private AnimatedButton musicButton;
+        // [SerializeField]
+        // private AnimatedButton musicButton;
 #pragma warning restore 649
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace GameVanilla.Game.Popups
         {
             base.Awake();
             Assert.IsNotNull(soundButton);
-            Assert.IsNotNull(musicButton);
+            // Assert.IsNotNull(musicButton);
         }
 
         /// <summary>
@@ -75,10 +75,10 @@ namespace GameVanilla.Game.Popups
         /// <summary>
         /// Called when the music button is pressed.
         /// </summary>
-        public void OnMusicButtonPressed()
-        {
-            SoundManager.instance.ToggleMusic();
-        }
+        // public void OnMusicButtonPressed()
+        // {
+        //     SoundManager.instance.ToggleMusic();
+        // }
 
         /// <summary>
         /// Updates the state of the sound and music buttons based on the appropriate PlayerPrefs values.
@@ -87,8 +87,8 @@ namespace GameVanilla.Game.Popups
         {
             var sound = PlayerPrefs.GetInt("sound_enabled");
             soundButton.GetComponent<SpriteSwapper>().SetEnabled(sound == 1);
-            var music = PlayerPrefs.GetInt("music_enabled");
-            musicButton.GetComponent<SpriteSwapper>().SetEnabled(music == 1);
+            // var music = PlayerPrefs.GetInt("music_enabled");
+            // musicButton.GetComponent<SpriteSwapper>().SetEnabled(music == 1);
         }
     }
 }
