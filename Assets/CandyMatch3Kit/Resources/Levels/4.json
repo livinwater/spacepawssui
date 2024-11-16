@@ -195,16 +195,10 @@
             "amount": 9,
             "$type": "GameVanilla.Game.Common.CollectCandyGoal"
         },
-        {
-            "candyType": "Orange",
-            "amount": 9,
-            "$type": "GameVanilla.Game.Common.CollectCandyGoal"
-        }
     ],
     "availableColors": [
         "Blue",
         "Green",
-        "Orange",
         "Purple",
         "Red",
         "Yellow"
