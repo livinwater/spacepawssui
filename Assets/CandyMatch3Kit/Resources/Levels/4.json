@@ -210,9 +210,9 @@
     "awardedSpecialCandyType": "Striped",
     "collectableChance": 0,
     "availableBoosters": {
-        "Lollipop": false,
-        "Bomb": false,
-        "Switch": false,
+        "Lollipop": true,
+        "Bomb": true,
+        "Switch": true,
         "ColorBomb": false
     }
 }
