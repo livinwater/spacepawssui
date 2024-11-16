@@ -52,7 +52,7 @@
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
         {
-            "type": "RandomCandy",
+            "type": "GreenCandy",
             "elementType": "None",
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
@@ -62,7 +62,7 @@
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
         {
-            "type": "RandomCandy",
+            "type": "GreenCandy",
             "elementType": "None",
             "$type": "GameVanilla.Game.Common.CandyTile"
         },
