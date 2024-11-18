@@ -1,0 +1,2 @@
+/Users/natalieyeo/Documents/repos/SpacePawsSui/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/CMakeLists.txt
+/Users/natalieyeo/Documents/repos/SpacePawsSui/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/CMakeLists.txt

@@ -1,0 +1,5 @@
+/Users/natalieyeo/Documents/repos/SpacePawsSui/.utmp/RelWithDebInfo/114e2i5n/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/natalieyeo/Documents/repos/SpacePawsSui/.utmp/RelWithDebInfo/114e2i5n/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/natalieyeo/Documents/repos/SpacePawsSui/.utmp/RelWithDebInfo/114e2i5n/arm64-v8a/GameActivity/CMakeFiles/game.dir
+/Users/natalieyeo/Documents/repos/SpacePawsSui/.utmp/RelWithDebInfo/114e2i5n/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+/Users/natalieyeo/Documents/repos/SpacePawsSui/.utmp/RelWithDebInfo/114e2i5n/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
